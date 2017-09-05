@@ -8,11 +8,14 @@
 
 import UIKit
 import CoreLocation
+import MapKit
 
-class ViewController: UIViewController,CLLocationManagerDelegate {
+class ViewController: UIViewController,CLLocationManagerDelegate, MKMapViewDelegate {
     
     var manager = CLLocationManager()
 
+    @IBOutlet weak var map: MKMapView!
+    
     @IBOutlet weak var latitudeLabel: UILabel!
     
     @IBOutlet weak var longitudeLabel: UILabel!
@@ -36,8 +39,12 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         
         manager.startUpdatingLocation()
         
+        map.showsUserLocation = true
+        
+        
         
     }
+     
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
@@ -52,6 +59,8 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         self.speedLabel.text = String(location.speed)
         
         self.altitudeLabel.text = String(location.altitude)
+        
+        
         
         CLGeocoder().reverseGeocodeLocation(location) { (placemarks, error) in
             if error != nil {

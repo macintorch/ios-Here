@@ -39,16 +39,14 @@ class ViewController: UIViewController,CLLocationManagerDelegate, MKMapViewDeleg
         
         manager.startUpdatingLocation()
         
-        map.showsUserLocation = true
-        
-        
-        
     }
      
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         let location = locations[0]
+        
+        // to display current user location to label
         
         self.latitudeLabel.text = String(location.coordinate.latitude)
         
@@ -60,7 +58,24 @@ class ViewController: UIViewController,CLLocationManagerDelegate, MKMapViewDeleg
         
         self.altitudeLabel.text = String(location.altitude)
         
+        // to display user current location on map
         
+        let latitude = location.coordinate.latitude
+        
+        let longitude = location.coordinate.longitude
+        
+        let latDelta: CLLocationDegrees = 0.1
+        
+        let lonDelta: CLLocationDegrees = 0.1
+        
+        let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
+        
+        let clLocation = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        
+        let region = MKCoordinateRegion(center: clLocation, span: span)
+        
+        self.map.setRegion(region, animated: true)
+
         
         CLGeocoder().reverseGeocodeLocation(location) { (placemarks, error) in
             if error != nil {
